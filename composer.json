@@ -35,10 +35,46 @@
       "drupol/composer-packages": true
     }
   },
-  "repositories": [
-    {
+  "repositories": {
+    "jfsenechal_doctrine_behaviors": {
       "type": "vcs",
-      "url": "git@github.com:antiftw/bolt-core.git"
+      "url": "git@github.com:jfsenechal/DoctrineBehaviors.git"
+    },
+    "antiftw-yaml-migrations": {
+      "type": "vcs",
+      "url": "https://github.com/antiftw/bdo-yaml-migrations"
+    },
+    "antiftw-php-translation-symfony-bundle": {
+      "type": "vcs",
+      "url": "https://github.com/antiftw/php-translation-symfony-bundle"
+    },
+    "antiftw-php-translation-extractor": {
+      "type": "vcs",
+      "url": "https://github.com/antiftw/php-translation-extractor"
+    },
+    "antiftw-php-translation-loco-adapter": {
+      "type": "vcs",
+      "url": "https://github.com/antiftw/php-translation-loco-adapter"
+    },
+    "antiftw-bolt-reference-extension": {
+      "type": "vcs",
+      "url": "https://github.com/antiftw/bolt-reference-extension"
+    },
+    "antiftw-bdo-configuration-notices": {
+      "type": "vcs",
+      "url": "https://github.com/antiftw/bdo-configuration-notices"
+    },
+    "antiftw-bdo-weatherwidget": {
+      "type": "vcs",
+      "url": "https://github.com/antiftw/bdo-weatherwidget"
+    },
+    "antiftw-bolt-newswidget": {
+      "type": "vcs",
+      "url": "https://github.com/antiftw/bolt-newswidget"
+    },
+    "antiftw-bolt-core": {
+      "type": "vcs",
+      "url": "https://github.com/antiftw/bolt-core"
     }
-  ]
+}
 }
