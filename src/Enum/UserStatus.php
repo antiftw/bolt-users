@@ -8,10 +8,10 @@ use Tightenco\Collect\Support\Collection;
 
 class UserStatus
 {
-    public const ENABLED = 'enabled';
-    public const DISABLED = 'disabled';
-    public const EMAIL_CONFIRMATION = 'email_confirmation';
-    public const ADMIN_CONFIRMATION = 'admin_confirmation';
+    public const string ENABLED = 'enabled';
+    public const string DISABLED = 'disabled';
+    public const string EMAIL_CONFIRMATION = 'email_confirmation';
+    public const string ADMIN_CONFIRMATION = 'admin_confirmation';
 
     /**
      * @return string[]

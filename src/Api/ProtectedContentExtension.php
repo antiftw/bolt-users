@@ -6,7 +6,7 @@ namespace Bolt\UsersExtension\Api;
 
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Util\QueryNameGeneratorInterface;
+use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use Bolt\Configuration\Config;
 use Bolt\Entity\Content;
 use Bolt\Entity\Field;
@@ -16,15 +16,10 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 final class ProtectedContentExtension implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
 {
-    /** @var Config */
-    private $config;
+    private array $protectedContentTypes;
 
-    /** @var array */
-    private $protectedContentTypes;
-
-    public function __construct(Config $config, AccessAwareController $accessAwareController)
+    public function __construct(private readonly Config $config, AccessAwareController $accessAwareController)
     {
-        $this->config = $config;
         $cts = $this->config->get('contenttypes');
 
         $this->protectedContentTypes = [];
@@ -38,7 +33,7 @@ final class ProtectedContentExtension implements QueryCollectionExtensionInterfa
         }
     }
 
-    public function applyToCollection(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, ?string $operationName = null): void
+    public function applyToCollection(QueryBuilder $queryBuilder, QueryNameGenerator|\ApiPlatform\Core\Bridge\Doctrine\Orm\Util\QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, ?string $operationName = null): void
     {
         if ($resourceClass === Content::class) {
             $this->filterProtectedContent($queryBuilder);

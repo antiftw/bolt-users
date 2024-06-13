@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Bolt\UsersExtension\Controller;
 
-use Bolt\Controller\Backend\BackendZoneInterface;
 use Bolt\Configuration\Config;
 use Bolt\Configuration\Content\ContentType;
+use Bolt\Controller\Backend\BackendZoneInterface;
 use Bolt\Controller\Backend\ContentEditController;
 use Bolt\Controller\TwigAwareController;
 use Bolt\Entity\Content;
@@ -17,7 +17,6 @@ use Bolt\Repository\ContentRepository;
 use Bolt\UsersExtension\ExtensionConfigTrait;
 use Bolt\UsersExtension\Utils\ExtensionTemplateChooser;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -26,43 +25,19 @@ class FrontendUsersProfileController extends AccessAwareController implements Ba
 {
     use ExtensionConfigTrait;
 
-    /** @var ContentRepository */
-    private $contentRepository;
-
-    /** @var ContentFillListener */
-    private $contentFillListener;
-
-    /** @var TwigAwareController */
-    private $twigAwareController;
-
-    /** @var ExtensionTemplateChooser */
-    private $templateChooser;
-
-    /** @var EntityManagerInterface */
-    private $em;
-
     public function __construct(
-        Config $config,
-        ContentRepository $contentRepository,
-        ContentEditController $contentEditController,
-        ContentFillListener $contentFillListener,
-        TwigAwareController $twigAwareController,
-        ExtensionTemplateChooser $templateChooser,
-        EntityManagerInterface $em)
-    {
+                         Config                   $config,
+        private readonly ContentRepository        $contentRepository,
+        private readonly ContentEditController    $contentEditController,
+        private readonly ContentFillListener      $contentFillListener,
+        private readonly TwigAwareController      $twigAwareController,
+        private readonly ExtensionTemplateChooser $templateChooser,
+        private readonly EntityManagerInterface   $em
+    ) {
         parent::__construct($config);
-
-        $this->contentRepository = $contentRepository;
-        $this->contentEditController = $contentEditController;
-        $this->contentFillListener = $contentFillListener;
-        $this->twigAwareController = $twigAwareController;
-        $this->templateChooser = $templateChooser;
-        $this->em = $em;
     }
 
-    /**
-     * @Route("/profile",methods={"GET"}, name="extension_frontend_user_profile")
-     */
+    #[Route('/profile', name: 'extension_frontend_user_profile', methods: ['GET'])]
     public function view(): Response
     {
         /** @var User $user */
@@ -71,7 +46,7 @@ class FrontendUsersProfileController extends AccessAwareController implements Ba
             return $this->redirectToRoute('bolt_user_edit', ['id' => $user->getId()]);
         }
 
-        if ($user !== null /* Ensure there is an active user logged on*/ ) {
+        if ($user !== null /* Ensure there is an active user logged on*/) {
             $contentTypeSlug = $this->findContentTypeSlug();
 
             /** @var ContentType $contentType */
@@ -79,8 +54,7 @@ class FrontendUsersProfileController extends AccessAwareController implements Ba
             $this->applyAllowForGroupsGuard($contentType);
 
             return $this->twigAwareController->renderSingle($this->getUserRecord($contentType), false);
-        }
-        else {
+        } else {
             // If session was invalidated or ended, redirect user as needed when they try to access profile
             // For instance, redirect to login page to prompt re-authentication
             $redirectRoute = $this->getExtension()->getExtConfig('redirect_on_session_null');
@@ -88,14 +62,12 @@ class FrontendUsersProfileController extends AccessAwareController implements Ba
         }
     }
 
-    /**
-     * @Route("/profile/edit", methods={"GET", "POST"}, name="extension_frontend_user_edit")
-     */
+    #[Route('/profile/edit', name: 'extension_frontend_user_edit', methods: ['GET', 'POST'])]
     public function edit(ContentType $contentType, Request $request): Response
     {
         $user = $this->getUser();
 
-        if ($user !== null /* Ensure there is an active user logged on*/ ) {
+        if ($user !== null /* Ensure there is an active user logged on*/) {
 
             $this->applyIsAuthenticatedGuard();
 
@@ -121,8 +93,7 @@ class FrontendUsersProfileController extends AccessAwareController implements Ba
             ];
 
             return $this->twigAwareController->render($templates, $parameters);
-        }
-        else {
+        } else {
             // If session was invalidated or ended, redirect user as needed when they try to access profile
             // For instance, redirect to login page to prompt re-authentication
             $redirectRoute = $this->getExtension()->getExtConfig('redirect_on_session_null');
@@ -137,7 +108,8 @@ class FrontendUsersProfileController extends AccessAwareController implements Ba
 
         // Access user record, if available
         $contentTypeSlug = $this->findContentTypeSlug();
-        $contentType = $this->getBoltConfig()->getContentType($contentTypeSlug);
+        // todo: not sure if the ->first should be here
+        $contentType = $this->getBoltConfig()->getContentType($contentTypeSlug)->first();
 
         $content = $this->contentRepository->findBy([
             'author' => $user,
@@ -146,9 +118,8 @@ class FrontendUsersProfileController extends AccessAwareController implements Ba
 
         // If user record unavailable, create it
         if (empty($content)) {
-            return $this->new($contentType);
-        }
-        elseif (is_iterable($content)) {
+            return $this->new($contentType->first());
+        } elseif (is_iterable($content)) {
             $content = end($content);
         }
 
@@ -176,9 +147,9 @@ class FrontendUsersProfileController extends AccessAwareController implements Ba
 
         // Initialise ALL extra fields as defined in the contenttype with empty strings.
         // This ensures they are displayed on the /profile/edit route without backend intervention
-        foreach($contentType->get('fields') as $name => $field){
+        foreach ($contentType->get('fields') as $name => $field) {
 
-            if(!in_array($name, ['displayName','username','slug'])) {
+            if (!in_array($name, ['displayName', 'username', 'slug'])) {
                 $content->setFieldValue($name, '');
             }
         }

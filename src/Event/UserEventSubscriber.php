@@ -36,7 +36,7 @@ class UserEventSubscriber implements EventSubscriberInterface, ExtensionConfigIn
         $event->setRoleOptions($event->getRoleOptions()->merge($roles));
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents() : array
     {
         return [
             UserEvent::ON_EDIT => ['onUserEdit', 0],

@@ -9,13 +9,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ExtensionUtils
 {
-    /** @var UrlGeneratorInterface */
-    private $generator;
-
-    public function __construct(UrlGeneratorInterface $generator)
-    {
-        $this->generator = $generator;
-    }
+    public function __construct(private readonly UrlGeneratorInterface $generator) {}
 
     public function isRoute(string $route, array $params = []): bool
     {

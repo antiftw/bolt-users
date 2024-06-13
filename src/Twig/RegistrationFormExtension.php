@@ -11,21 +11,11 @@ use Twig\TwigFunction;
 
 class RegistrationFormExtension extends AbstractExtension
 {
-    /** @var UrlGeneratorInterface */
-    private $router;
+    public function __construct(
+        private readonly UrlGeneratorInterface $router,
+        private readonly CsrfTokenManagerInterface $csrfTokenManager
+    ){}
 
-    /** @var CsrfTokenManagerInterface */
-    private $csrfTokenManager;
-
-    public function __construct(UrlGeneratorInterface $router, CsrfTokenManagerInterface $csrfTokenManager)
-    {
-        $this->router = $router;
-        $this->csrfTokenManager = $csrfTokenManager;
-    }
-
-    /**
-     * Register Twig functions.
-     */
     public function getFunctions(): array
     {
         $safe = [

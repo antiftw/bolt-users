@@ -17,21 +17,11 @@ class LoginFormExtension extends AbstractExtension implements ExtensionConfigInt
 {
     use ExtensionConfigTrait;
 
-    /** @var UrlGeneratorInterface */
-    private $router;
-
-    /** @var CsrfTokenManagerInterface */
-    private $csrfTokenManager;
-
-    /** @var ExtensionUtils */
-    private $utils;
-
-    public function __construct(UrlGeneratorInterface $router, CsrfTokenManagerInterface $csrfTokenManager, ExtensionUtils $utils)
-    {
-        $this->router = $router;
-        $this->csrfTokenManager = $csrfTokenManager;
-        $this->utils = $utils;
-    }
+    public function __construct(
+        private readonly UrlGeneratorInterface $router,
+        private readonly CsrfTokenManagerInterface $csrfTokenManager,
+        private readonly ExtensionUtils $utils
+    ) {}
 
     /**
      * Register Twig functions.
