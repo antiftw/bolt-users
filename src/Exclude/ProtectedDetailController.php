@@ -14,11 +14,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ProtectedDetailController extends AccessAwareController implements DetailControllerInterface
 {
-    /** @var Config */
-    private $config;
-
-    /** @var DetailController */
-    private $detailController;
+    private Config $config;
+    private DetailController $detailController;
 
     public function __construct(DetailController $detailController, Config $config)
     {
@@ -28,20 +25,19 @@ class ProtectedDetailController extends AccessAwareController implements DetailC
         $this->detailController = $detailController;
     }
 
-    /**
-     * @Route(
-     *     "/{contentTypeSlug}/{slugOrId}",
-     *     name="record",
-     *     requirements={"contentTypeSlug"="%bolt.requirement.contenttypes%"},
-     *     methods={"GET|POST"})
-     * @Route(
-     *     "/{_locale}/{contentTypeSlug}/{slugOrId}",
-     *     name="record_locale",
-     *     requirements={"contentTypeSlug"="%bolt.requirement.contenttypes%", "_locale": "%app_locales%"},
-     *     methods={"GET|POST"})
-     *
-     * @param string|int $slugOrId
-     */
+    /** @param string|int $slugOrId */
+    #[Route(
+        "/{contentTypeSlug}/{slugOrId}",
+        name: "record",
+        requirements: ["contentTypeSlug" => "%bolt.requirement.contenttypes%"],
+        methods: ["GET|POST"]
+    )]
+    #[Route(
+        "/{_locale}/{contentTypeSlug}/{slugOrId}",
+        name: "record_locale",
+        requirements: ["contentTypeSlug" => "%bolt.requirement.contenttypes%", "_locale" => "%app_locales%"],
+        methods: ["GET|POST"]
+    )]
     public function record($slugOrId, ?string $contentTypeSlug = null, bool $requirePublished = true, string $_locale = null): Response
     {
         $contentType = ContentType::factory($contentTypeSlug, $this->config->get('contenttypes'));

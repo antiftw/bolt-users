@@ -9,7 +9,7 @@ use Bolt\UsersExtension\ExtensionConfigInterface;
 use Bolt\UsersExtension\ExtensionConfigTrait;
 use Tightenco\Collect\Support\Collection;
 
-class ExtensionTemplateChooser extends TemplateChooser implements ExtensionConfigInterface
+readonly class ExtensionTemplateChooser extends TemplateChooser implements ExtensionConfigInterface
 {
     use ExtensionConfigTrait;
 

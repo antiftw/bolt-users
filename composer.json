@@ -10,14 +10,14 @@
     }
   ],
   "require": {
-    "php": ">=7.1.3",
-    "twig/twig": "^2.12 | ^3.0"
+    "php": "^8.3",
+    "twig/twig": "^3.0"
   },
   "require-dev": {
-    "bolt/core": "^4.0.0",
-    "symplify/easy-coding-standard": "^8.1",
-    "phpstan/phpstan": "^0.12.32",
-    "phpstan/phpstan-symfony": "^0.12.6"
+    "bolt/core": "dev-5.2.0-rc.2",
+    "symplify/easy-coding-standard": "^12.2",
+    "phpstan/phpstan": "^1.11",
+    "phpstan/phpstan-symfony": "^1.4"
   },
   "autoload": {
     "psr-4": {
@@ -28,5 +28,53 @@
   "prefer-stable": true,
   "extra": {
     "entrypoint": "Bolt\\UsersExtension\\Extension"
-  }
+  },
+  "config": {
+    "allow-plugins": {
+      "symfony/flex": true,
+      "drupol/composer-packages": true
+    }
+  },
+  "repositories": {
+    "jfsenechal_doctrine_behaviors": {
+      "type": "vcs",
+      "url": "git@github.com:jfsenechal/DoctrineBehaviors.git"
+    },
+    "antiftw-yaml-migrations": {
+      "type": "vcs",
+      "url": "https://github.com/antiftw/bdo-yaml-migrations"
+    },
+    "antiftw-php-translation-symfony-bundle": {
+      "type": "vcs",
+      "url": "https://github.com/antiftw/php-translation-symfony-bundle"
+    },
+    "antiftw-php-translation-extractor": {
+      "type": "vcs",
+      "url": "https://github.com/antiftw/php-translation-extractor"
+    },
+    "antiftw-php-translation-loco-adapter": {
+      "type": "vcs",
+      "url": "https://github.com/antiftw/php-translation-loco-adapter"
+    },
+    "antiftw-bolt-reference-extension": {
+      "type": "vcs",
+      "url": "https://github.com/antiftw/bolt-reference-extension"
+    },
+    "antiftw-bdo-configuration-notices": {
+      "type": "vcs",
+      "url": "https://github.com/antiftw/bdo-configuration-notices"
+    },
+    "antiftw-bdo-weatherwidget": {
+      "type": "vcs",
+      "url": "https://github.com/antiftw/bdo-weatherwidget"
+    },
+    "antiftw-bolt-newswidget": {
+      "type": "vcs",
+      "url": "https://github.com/antiftw/bolt-newswidget"
+    },
+    "antiftw-bolt-core": {
+      "type": "vcs",
+      "url": "https://github.com/antiftw/bolt-core"
+    }
+}
 }

@@ -14,11 +14,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ProtectedListingController extends AccessAwareController
 {
-    /** @var ListingController */
-    private $listingController;
-
-    /** @var Config */
-    private $config;
+    private ListingController $listingController;
+    private Config $config;
 
     public function __construct(ListingController $listingController, Config $config)
     {
@@ -28,18 +25,18 @@ class ProtectedListingController extends AccessAwareController
         $this->config = $config;
     }
 
-    /**
-     * @Route(
-     *     "/{contentTypeSlug}",
-     *     name="listing_custom",
-     *     requirements={"contentTypeSlug"="%bolt.requirement.contenttypes%"},
-     *     methods={"GET|POST"})
-     * @Route(
-     *     "/{_locale}/{contentTypeSlug}",
-     *     name="listing_locale_custom",
-     *     requirements={"contentTypeSlug"="%bolt.requirement.contenttypes%", "_locale": "%app_locales%"},
-     *     methods={"GET|POST"})
-     */
+    #[Route(
+        "/{contentTypeSlug}",
+        name: "listing_custom",
+        requirements: ["contentTypeSlug" => "%bolt.requirement.contenttypes%"],
+        methods: ["GET|POST"]
+    )]
+    #[Route(
+        "/{_locale}/{contentTypeSlug}",
+        name: "listing_locale_custom",
+        requirements: ["contentTypeSlug" => "%bolt.requirement.contenttypes%", "_locale" => "%app_locales%"],
+        methods: ["GET|POST"]
+    )]
     public function listing(ContentRepository $contentRepository, string $contentTypeSlug): Response
     {
         $contentType = ContentType::factory($contentTypeSlug, $this->config->get('contenttypes'));

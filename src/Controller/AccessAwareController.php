@@ -23,7 +23,7 @@ class AccessAwareController extends ExtensionController implements ExtensionConf
                 $this->denyAccessUnlessGranted(new Expression(sprintf("'%s' in role_names", $allowedGroups)));
             }
 
-            // Iterate over all of the given roles.
+            // Iterate over all the given roles.
             // If at least one is allowed, then the user has access and we return.
             foreach ($allowedGroups as $role) {
                 if ($this->isGranted(new Expression(sprintf("'%s' in role_names", $role)))) {

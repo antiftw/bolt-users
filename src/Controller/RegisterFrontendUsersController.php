@@ -10,7 +10,6 @@ use Bolt\Entity\User;
 use Bolt\Extension\ExtensionController;
 use Bolt\Repository\UserRepository;
 use Bolt\UsersExtension\Enum\UserStatus;
-use Bolt\UsersExtension\Extension;
 use Bolt\UsersExtension\ExtensionConfigInterface;
 use Bolt\UsersExtension\ExtensionConfigTrait;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,7 +18,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Validator\ConstraintViolationInterface;
@@ -29,22 +28,14 @@ class RegisterFrontendUsersController extends ExtensionController implements Ext
 {
     use ExtensionConfigTrait;
     use CsrfTrait;
-
-    /** @var EntityManagerInterface */
-    private $em;
-
-    /** @var UserPasswordEncoderInterface */
-    private $passwordEncoder;
-
-    /** @var array */
-    private $forbiddenRoles = ['ROLE_ADMIN', 'ROLE_EDITOR'];
-
-    /** @var Request */
-    private $request;
+    private EntityManagerInterface $em;
+    private UserPasswordHasherInterface $passwordEncoder;
+    private array $forbiddenRoles = ['ROLE_ADMIN', 'ROLE_EDITOR'];
+    private ?Request $request;
 
     public function __construct(
         EntityManagerInterface $em,
-        UserPasswordEncoderInterface $passwordEncoder,
+        UserPasswordHasherInterface $passwordEncoder,
         CsrfTokenManagerInterface $csrfTokenManager,
         Config $config,
         RequestStack $requestStack)
@@ -57,9 +48,7 @@ class RegisterFrontendUsersController extends ExtensionController implements Ext
         $this->request = $requestStack->getCurrentRequest();
     }
 
-    /**
-     * @Route("/register", methods={"POST"}, name="extension_edit_frontend_user")
-     */
+    #[Route('/register', name: 'extension_edit_frontend_user', methods: ['POST'])]
     public function save(?User $user, ValidatorInterface $validator): Response
     {
         $referer = $this->request->headers->get('referer');
@@ -108,7 +97,7 @@ class RegisterFrontendUsersController extends ExtensionController implements Ext
 
         // Once validated, encode the password
         if ($user->getPlainPassword()) {
-            $user->setPassword($this->passwordEncoder->encodePassword($user, $user->getPlainPassword()));
+            $user->setPassword($this->passwordEncoder->hashPassword($user, $user->getPlainPassword()));
             $user->eraseCredentials();
         }
 
