@@ -8,7 +8,7 @@ use Bolt\Extension\ExtensionRegistry;
 
 trait ExtensionConfigTrait
 {
-    private ExtensionRegistry $registry;
+    private readonly ExtensionRegistry $registry;
 
     public function getExtension(): Extension
     {
