@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Bolt\UsersExtension\Event;
 
 use Bolt\Event\UserEvent;
+use Bolt\Extension\ExtensionRegistry;
 use Bolt\UsersExtension\ExtensionConfigInterface;
 use Bolt\UsersExtension\ExtensionConfigTrait;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -13,6 +14,10 @@ use Tightenco\Collect\Support\Collection;
 class UserEventSubscriber implements EventSubscriberInterface, ExtensionConfigInterface
 {
     use ExtensionConfigTrait;
+
+    public function __construct(private readonly ExtensionRegistry $registry)
+    {
+    }
 
     public function onUserEdit(UserEvent $event): void
     {
