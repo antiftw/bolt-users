@@ -20,7 +20,6 @@ class ProtectedListingController extends AccessAwareController
     public function __construct(ListingController $listingController, Config $config)
     {
         parent::__construct($config);
-
         $this->listingController = $listingController;
         $this->config = $config;
     }
@@ -37,11 +36,11 @@ class ProtectedListingController extends AccessAwareController
         requirements: ["contentTypeSlug" => "%bolt.requirement.contenttypes%", "_locale" => "%app_locales%"],
         methods: ["GET|POST"]
     )]
-    public function listing(ContentRepository $contentRepository, string $contentTypeSlug): Response
+    public function listing(string $contentTypeSlug): Response
     {
         $contentType = ContentType::factory($contentTypeSlug, $this->config->get('contenttypes'));
         $this->applyAllowForGroupsGuard($contentType);
 
-        return $this->listingController->listing($contentRepository, $contentTypeSlug);
+        return $this->listingController->listing($contentTypeSlug);
     }
 }
